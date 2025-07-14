@@ -3,6 +3,7 @@ import { Krona_One } from "next/font/google";
 import "./globals.css";
 import Header from "./components/header"
 import Footer from "./components/footer";
+import { Toaster } from "react-hot-toast";
 
 const kronaOne = Krona_One({
   subsets: ["latin"],
@@ -23,9 +24,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${kronaOne.variable} bg-main-bg`}>
+      <body className={`${kronaOne.variable} bg-main-bg min-h-screen flex flex-col`}>
+        <Toaster
+          position="bottom-center"
+          reverseOrder={false}
+        />
         <Header />
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
         <Footer />
       </body>
     </html>

@@ -8,10 +8,10 @@ export type DemonCardProps = {
   name: string;
   place: number;
   author: string;
-  img: string;
+  url: string;
 };
 
-export default function Card({ id, name, place, author, img }: DemonCardProps) {
+export default function Card({ id, name, place, author, url }: DemonCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
@@ -20,23 +20,25 @@ export default function Card({ id, name, place, author, img }: DemonCardProps) {
 
   return (
     <div
-      className="flex flex-row bg-main-darklight h-80 w-full max-w-screen-lg rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-main-darklight/80"
+      className="flex lg:flex-row flex-col items-center bg-main-darklight lg:h-80 h-[400px] w-full max-w-screen-lg rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-main-darklight/80 px-2 shadow-2xl"
       onClick={handleClick}
     >
-      <Image
-        src={img}
-        alt="Card Image"
-        width={400}
-        height={200}
-        className="rounded-xl m-2 object-cover"
-        style={{ maxWidth: "400px", maxHeight: "200px" }}
-      />
-      <span className="flex flex-col justify-center items-start flex-1 pl-8">
-        <span className="flex flex-row items-end">
-          <h1 className="text-7xl">#{place}</h1>
-          <p className="text-3xl mx-3 mb-2">{name}</p>
+      <div className="m-2 rounded-xl overflow-hidden mt-4" style={{ width: "400px", height: "200px", maxWidth: "400px", maxHeight: "200px" }}>
+        <Image
+          src={`https://img.youtube.com/vi/${url}/hqdefault.jpg`}
+          alt={name}
+          width={400}
+          height={200}
+          className="object-cover w-full h-full shadow-2xl lg:mt-0 "
+          priority
+        />      
+      </div>
+      <span className="flex flex-col justify-center items-center lg:items-start flex-1 pl-0 lg:pl-8 w-full">
+        <span className="flex flex-col lg:flex-row items-center lg:items-end w-full">
+          <h1 className="text-7xl text-center lg:text-left w-full lg:w-auto">#{place}</h1>
+          <p className="text-3xl mx-0 lg:mx-3 mb-2 text-center lg:text-left w-full lg:w-auto">{name}</p>
         </span>
-        <p className="text-white/70 text-xl">by {author}</p>
+        <p className="text-white/70 text-xl text-center lg:text-left w-full lg:w-auto">by {author}</p>
       </span>
     </div>
   );

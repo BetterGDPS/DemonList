@@ -3,44 +3,12 @@
 import { useState } from "react";
 import { Search as SearchIcon } from "lucide-react";
 import Card from "./card";
-
-// Пример данных
-const demons = [
-	{
-		id: 1,
-		name: "Bloodbath",
-		place: 1,
-		author: "Riot",
-		img: "/bloodbath.jpg",
-	},
-	{
-		id: 2,
-		name: "Tartarus",
-		place: 2,
-		author: "Dolphy",
-		img: "/tartarus.jpg",
-	},
-	{
-		id: 3,
-		name: "Slaughterhouse",
-		place: 3,
-		author: "Icedcave",
-		img: "/slaughterhouse.jpg",
-	},
-	{
-		id: 4,
-		name: "Acheron",
-		place: 4,
-		author: "Ryamu",
-		img: "/acheron.jpg",
-	},
-];
+import { demons } from "./demon"
 
 export default function Search() {
 	const [query, setQuery] = useState("");
 	const [searchValue, setSearchValue] = useState("");
 
-	// Фильтрация по поисковому запросу
 	const filtered = demons.filter(demon =>
 		demon.name.toLowerCase().includes(searchValue.toLowerCase())
 	);
@@ -78,7 +46,7 @@ export default function Search() {
 							name={demon.name}
 							place={demon.place}
 							author={demon.author}
-							img={demon.img}
+							url={demon.url}
 						/>
 					</li>
 				))}
