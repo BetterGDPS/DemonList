@@ -15,7 +15,7 @@ export default function Card({ id, name, place, author, url }: DemonCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push(`/lvl/${id}`);
+    router.push(`/level/${id}`);
   };
 
   return (
@@ -23,13 +23,13 @@ export default function Card({ id, name, place, author, url }: DemonCardProps) {
       className="flex lg:flex-row flex-col items-center bg-main-darklight lg:h-80 h-[400px] w-full max-w-screen-lg rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-main-darklight/80 px-2 shadow-2xl"
       onClick={handleClick}
     >
-      <div className="m-2 rounded-xl overflow-hidden mt-4" style={{ width: "400px", height: "200px", maxWidth: "400px", maxHeight: "200px" }}>
+      <div className="m-2 rounded-xl overflow-hidden mt-4 w-full max-w-[300px] h-[150px] md:max-w-[400px] md:h-[200px]">
         <Image
           src={`https://img.youtube.com/vi/${url}/hqdefault.jpg`}
           alt={name}
           width={400}
           height={200}
-          className="object-cover w-full h-full shadow-2xl lg:mt-0 "
+          className="object-cover w-full h-full shadow-2xl lg:mt-0"
           priority
         />      
       </div>
