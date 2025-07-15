@@ -17,7 +17,6 @@ export default function Card({ id, name, place, author, url }: DemonCardProps) {
   const handleClick = () => {
     router.push(`/level/${id}`);
   };
-
   return (
     <div
       className="flex lg:flex-row flex-col items-center bg-main-darklight lg:h-80 h-[400px] w-full max-w-screen-lg rounded-xl cursor-pointer transition-all duration-200 hover:scale-105 hover:bg-main-darklight/80 px-2 shadow-2xl"
@@ -25,7 +24,7 @@ export default function Card({ id, name, place, author, url }: DemonCardProps) {
     >
       <div className="m-2 rounded-xl overflow-hidden mt-4 w-full max-w-[300px] h-[150px] md:max-w-[400px] md:h-[200px]">
         <Image
-          src={`https://img.youtube.com/vi/${url}/hqdefault.jpg`}
+          src={url.startsWith('/') ? url : `https://img.youtube.com/vi/${url}/hqdefault.jpg`}
           alt={name}
           width={400}
           height={200}
