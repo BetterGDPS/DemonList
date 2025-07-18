@@ -29,7 +29,7 @@ export const getLevels = async (): Promise<Demon[]> => {
   
   return data.data.map((demon: Demon) => ({
     ...demon,
-    url: getYoutubeId(demon.url) || '/empty.png' // Подставляем заглушку если нет YouTube ID
+    url: getYoutubeId(demon.url) || '/empty.png'
   })).sort((a: Demon, b: Demon) => a.place - b.place);
 };
 
@@ -43,7 +43,7 @@ export const getLevelById = async (id: number): Promise<Demon> => {
 
     return {
       ...data.data,
-      url: getYoutubeId(data.data.url) || '/empty.jpg'// Подставляем заглушку если нет YouTube ID
+      url: getYoutubeId(data.data.url) || '/empty.png'
     };
   } catch (error) {
     console.error(`Error fetching level ${id}:`, error);

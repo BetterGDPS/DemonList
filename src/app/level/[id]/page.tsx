@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { getLevelById, Demon } from "../../components/levels";
 import Image from "next/image";
-import { Loader2 } from "lucide-react"; // Импортируем иконку спиннера
+import { Loader2 } from "lucide-react";
 
 type Props = {
   params: {
@@ -26,7 +26,16 @@ export default function Level({ params: { id } }: Props) {
         setDemon(foundDemon);
       } catch (error) {
         console.error("Error loading demon:", error);
-        toast.error("Failed to load demon data");
+        toast.error("Failed to load demon data", {
+        style: {
+          color: '#778DA9',
+          background: '#1B263B',
+        },
+        iconTheme: {
+          primary: '#778DA9',
+          secondary: '#1B263B',
+        },
+      });
         setDemon(null);
       } finally {
         setLoading(false);
@@ -45,7 +54,7 @@ export default function Level({ params: { id } }: Props) {
       },
       iconTheme: {
         primary: '#778DA9',
-        secondary: '#FFFAEE',
+        secondary: '#1B263B',
       },
     });
   };
@@ -60,7 +69,7 @@ export default function Level({ params: { id } }: Props) {
 
   if (!demon) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center items-center mt-20">
         <div className="text-2xl">Demon not found</div>
       </div>
     );

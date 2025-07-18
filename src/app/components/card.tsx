@@ -35,9 +35,9 @@ export default function Card({ id, name, place, author, url }: DemonCardProps) {
       <span className="flex flex-col justify-center items-center lg:items-start flex-1 pl-0 lg:pl-8 w-full">
         <span className="flex flex-col lg:flex-row items-center lg:items-end w-full">
           <h1 className="text-7xl text-center lg:text-left w-full lg:w-auto">#{place}</h1>
-          <p className="text-3xl mx-0 lg:mx-3 mb-2 text-center lg:text-left w-full lg:w-auto">{name}</p>
+          <p className="text-2xl md:text-3xl mx-0 lg:mx-3 mb-2 text-center lg:text-left w-full lg:w-auto">{name}</p>
         </span>
-        <p className="text-white/70 text-xl text-center lg:text-left w-full lg:w-auto">by {author}</p>
+        <p className="text-white/70 text-lg md:text-xl text-center lg:text-left w-full lg:w-auto">by {author}</p>
       </span>
     </div>
   );
