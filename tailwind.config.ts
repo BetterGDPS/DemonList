@@ -20,7 +20,7 @@ const config: Config = {
         logo: {
           green: "#83FF92",
           blue: "#72A3FF",
-          red: "#FF7E72"
+          red: "#FA5170"
         }
       },
     },

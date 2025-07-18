@@ -5,7 +5,7 @@ import axios from 'axios';
 export type Demon = {
   _id: number;
   name: string;
-  place: number;
+  place?: number;
   lenght: string;
   obj: number;
   author: string;
@@ -13,6 +13,7 @@ export type Demon = {
   verifed: string;
   release: string;
   url: string;
+  unlisted?: boolean;
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -24,13 +25,17 @@ export const getYoutubeId = (url: string | undefined): string | null => {
   return match ? match[1] : null;
 };
 
-export const getLevels = async (): Promise<Demon[]> => {
-  const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/all`);
+export const getLevels = async (type: string = 'main'): Promise<Demon[]> => {
+  const endpoint = type === 'main' ? 'main' : 'unlisted';
+  const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/${endpoint}`);
   
   return data.data.map((demon: Demon) => ({
     ...demon,
     url: getYoutubeId(demon.url) || '/empty.png'
-  })).sort((a: Demon, b: Demon) => a.place - b.place);
+  })).sort((a: Demon, b: Demon) => {
+    if (type === 'main') return (a.place || 0) - (b.place || 0);
+    return (a._id - b._id);
+  });
 };
 
 export const getLevelById = async (id: number): Promise<Demon> => {
