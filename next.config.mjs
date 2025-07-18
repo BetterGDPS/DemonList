@@ -2,6 +2,9 @@
 const nextConfig = {
     images: {
         domains: ['img.youtube.com'],
+    },
+    experimental: {
+        missingSuspenseWithCSRBailout: false,
     }
 };
 
