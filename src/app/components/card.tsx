@@ -35,7 +35,7 @@ export default function Card({ id, name, place, author, url, unlisted }: DemonCa
         />
         {url.startsWith('/') && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-logo-blue text-2xl md:text-3xl font-bold text-center p-2">
+            <p className="text-logo-blue text-2xl md:text-3xl font-bold text-center p-2 drop-shadow-xl">
               {name}
             </p>
           </div>
