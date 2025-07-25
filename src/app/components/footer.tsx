@@ -17,8 +17,8 @@ export default function Footer() {
             <hr className="border-t-2 border-main-darklight my-4" />
 
             <div className="text-main-darklight text-center text-sm sm:text-base">
-                <h1>BGDPS 2025 by <a href="https://github.com/brokkolya4" target="_blank" className="hover:underline">Brokkolya</a></h1>
-                <h1 className="text-xs sm:text-sm">Site developed by <a href="https://thekeny.ru" target="_blank" className="hover:underline">Kenyka</a></h1>
+                <h1>BGDPS 2025</h1>
+                <a className="text-xs sm:text-sm hover:underline" href="/staff">Demonlist staff</a>
             </div>
         </div>
     )

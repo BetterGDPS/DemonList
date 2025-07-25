@@ -77,6 +77,11 @@ export default function Header() {
                 >
                   Platformer List
                 </span>
+                <span
+                  className="block w-full text-left px-4 py-2 transition-colors text-white/50 hover:cursor-default"
+                >
+                  Challenge List
+                </span>
               </div>
             </div>
           )}
