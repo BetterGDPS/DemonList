@@ -79,7 +79,7 @@ export default function page() {
                 </div>
               </div>
               <div className="p-4 text-center">
-                <h3 className="text-lg font-bold mb-1">Dimkaday</h3>
+                <h3 className="text-lg font-bold mb-1">Oery</h3>
                 <p className="text-gray-600 text-sm">
                   Demonlist Administrator
                 </p>

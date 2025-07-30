@@ -72,16 +72,13 @@ export default function Header() {
                 >
                   Unlisted Levels
                 </button>
-                <span
-                  className="block w-full text-left px-4 py-2 transition-colors text-white/50 hover:cursor-default"
+                <hr className='border-white/40'/>
+                <a
+                  className="block w-full text-sm text-left px-4 py-2 transition-colors text-white/50 hover:cursor-pointer hover:underline hover:text-white/75"
+                  href='https://discord.gg/KCbGSn79ka' target='_blank'
                 >
-                  Platformer List
-                </span>
-                <span
-                  className="block w-full text-left px-4 py-2 transition-colors text-white/50 hover:cursor-default"
-                >
-                  Challenge List
-                </span>
+                  Send request
+                </a>
               </div>
             </div>
           )}
