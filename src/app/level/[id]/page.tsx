@@ -79,7 +79,7 @@ export default function Level({ params: { id } }: Props) {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="mt-20 w-[1000px] bg-main-darklight rounded-xl shadow-2xl p-10">
+      <div className="mt-28 w-[1000px] bg-main-darklight rounded-xl shadow-2xl p-10">
         <span className="flex flex-col justify-center items-center flex-1">
           <span className="flex flex-row items-end">
             {!unlisted && place && (
@@ -111,6 +111,7 @@ export default function Level({ params: { id } }: Props) {
                 (e.target as HTMLImageElement).src = '/empty.png';
               }}
             />
+            <p className="text-center mt-4 hover:text-white/80 hover:underline">showcase</p>
             {demon.url?.startsWith('/') && (
               <div className="absolute inset-0 flex items-center justify-center rounded-xl mt-4 ">
                 <p className="text-logo-blue text-3xl font-bold text-center p-4 drop-shadow-xl">
