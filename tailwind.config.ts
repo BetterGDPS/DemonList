@@ -12,10 +12,11 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
         main: {
-          bg: "#1B263B",
-          dark: "#0D1B2A",
-          light: "#778DA9",
-          darklight: "#415A77"
+          bg: "#252525",
+          dark: "#1C1C1C",
+          light: "#404040",
+          darklight: "#1B1B1B",
+          lightlight: "#7C7C7C",
         },
         logo: {
           green: "#83FF92",

@@ -65,6 +65,46 @@ export default function page() {
                 </p>
               </div>
             </div>
+
+            <div className="flex flex-col rounded-lg overflow-hidden shadow-md border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-6 px-5 bg-[#232a3a] w-full">
+              <div className="flex justify-center pt-2">
+                <div className="relative w-32 h-32">
+                  <Image
+                    src="/staff/drsdz.png"
+                    alt="drsdz"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-xl font-bold mb-1">Drsdz</h3>
+                <p className="text-gray-600 text-base">
+                  Exposurer
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-col rounded-lg overflow-hidden shadow-md border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-6 px-5 bg-[#232a3a] w-full">
+              <div className="flex justify-center pt-2">
+                <div className="relative w-32 h-32">
+                  <Image
+                    src="/staff/holeks.png"
+                    alt="holeks"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                </div>
+              </div>
+              <div className="p-4 text-center">
+                <h3 className="text-xl font-bold mb-1">Holeks</h3>
+                <p className="text-gray-600 text-base">
+                  Analytics
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>

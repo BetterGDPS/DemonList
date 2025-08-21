@@ -70,13 +70,13 @@ export default function Search() {
           placeholder="Search..."
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="w-full h-12 px-4 bg-main-light text-white placeholder-white outline-none focus:bg-main-light/90"
+          className="w-full h-12 px-4 bg-main-light text-white placeholder-white/50 outline-none focus:bg-main-light/90"
         />
         <button
           type="submit"
           className="h-12 w-20 flex items-center justify-center bg-main-darklight hover:bg-main-darklight/80"
         >
-          <SearchIcon size={24} className="text-black" />
+          <SearchIcon size={24} />
         </button>
       </form>
 

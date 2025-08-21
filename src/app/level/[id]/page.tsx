@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { getLevelById, Demon } from "../../components/levels";
-import Image from "next/image";
 import { Loader2 } from "lucide-react";
 
 type Props = {
@@ -90,38 +89,24 @@ export default function Level({ params: { id } }: Props) {
           <p className="text-white/70 text-xl">by {author}</p>
         </span>
         <div className="flex justify-center items-center relative">
-          <a 
-            href={demon.url?.startsWith('/') ? '#' : `https://youtu.be/${demon.url}`}
-            target={demon.url?.startsWith('/') ? '' : '_blank'}
-            rel="noopener noreferrer"
-            className={`${demon.url?.startsWith('/') && 'hover:cursor-default'}`}
-          >
-            <Image
-              src={
-                demon.url?.startsWith('/') 
-                ? demon.url
-                : `https://img.youtube.com/vi/${demon.url}/hqdefault.jpg`
-              }
-              alt={name}
-              width={500}
-              height={200}
-              className={`aspect-video object-cover rounded-xl mt-4 shadow-2xl ${!demon.url?.startsWith('/') && 'hover:scale-105'} transition-transform`}
-              priority
-              onError={(e) => {
-                (e.target as HTMLImageElement).src = '/empty.png';
-              }}
+          {demon.url?.startsWith('/') ? (
+            <div className="relative w-[500px] h-[200px] mt-4 rounded-xl shadow-2xl bg-main-darklight flex items-center justify-center">
+              <p className="text-logo-blue text-3xl font-bold text-center p-4 drop-shadow-xl">
+                {name}
+              </p>
+            </div>
+          ) : (
+            <iframe
+              width={1920/3}
+              height={1080/3}
+              className="aspect-video rounded-xl mt-4 shadow-2xl"
+              src={`https://www.youtube.com/embed/${demon.url}`}
+              title={name}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
             />
-            {!demon.url?.startsWith('/') &&
-              <p className="text-center mt-4 hover:text-white/80 hover:underline">showcase</p>
-            }
-            {demon.url?.startsWith('/') && (
-              <div className="absolute inset-0 flex items-center justify-center rounded-xl mt-4 ">
-                <p className="text-logo-blue text-3xl font-bold text-center p-4 drop-shadow-xl">
-                  {name}
-                </p>
-              </div>
-            )}
-          </a>
+          )}
         </div>
         <section className="flex flex-col items-center mt-6 w-full">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xs sm:max-w-md">
@@ -130,7 +115,7 @@ export default function Level({ params: { id } }: Props) {
               onClick={() => copyToClipboard((lvl || 0).toString(), "ID copied to clipboard")}
             >
               <span className="text-lg">ID</span>
-              <span className="text-sm">{lvl}</span>
+              <span className="text-sm text-blue-300 hover:underline">{lvl}</span>
             </li>
             <li 
               className={`border-gray-400 border-2 rounded-lg h-16 flex flex-col items-center justify-center text-center ${
@@ -139,23 +124,23 @@ export default function Level({ params: { id } }: Props) {
               onClick={song !== 0 ? () => copyToClipboard(song.toString(), "Song ID copied to clipboard") : undefined}
             >
               <span className="text-lg">Song ID</span>
-              <span className="text-sm">{song === 0 ? '-' : song}</span>
+              <span className="text-sm text-blue-300 hover:underline">{song === 0 ? '-' : song}</span>
             </li>
             <li className="border-gray-400 border-2 rounded-lg h-16 flex flex-col items-center justify-center text-center">
               <span className="text-lg">Lenght</span>
-              <span>{lenght}</span>
+              <span className="text-sm">{lenght}</span>
             </li>
             <li className="border-gray-400 border-2 rounded-lg h-16 flex flex-col items-center justify-center text-center">
               <span className="text-lg">Object</span>
-              <span>{obj}</span>
+              <span className="text-sm">{obj}</span>
             </li>
             <li className="border-gray-400 border-2 rounded-lg h-16 flex flex-col items-center justify-center text-center">
-              <span className="text-lg">Verifed by</span>
-              <span>{unlisted ? '-' : verifed}</span>
+              <span className="text-lg">Verifed</span>
+              <span className="text-sm">{unlisted ? '-' : verifed}</span>
             </li>
             <li className="border-gray-400 border-2 rounded-lg h-16 flex flex-col items-center justify-center text-center">
               <span className="text-lg">Release</span>
-              <span>{release}</span>
+              <span className="text-sm">{release}</span>
             </li>
           </ul>
         </section>
