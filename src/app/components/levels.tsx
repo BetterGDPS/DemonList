@@ -26,26 +26,23 @@ export const getYoutubeId = (url: string | undefined): string | null => {
 };
 
 export const getLevels = async (type: string = 'main'): Promise<Demon[]> => {
-  const endpoint = type === 'main' ? 'main' : 'unlisted';
-  const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/${endpoint}`);
-  
-  return data.data.map((demon: Demon) => ({
-    ...demon,
-    url: getYoutubeId(demon.url) || '/empty.png'
-  })).sort((a: Demon, b: Demon) => {
-    if (type === 'main') return (a.place || 0) - (b.place || 0);
-    return (a._id - b._id);
-  });
+  if (type === 'main') {
+    const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/main`);
+    return data.data.map((demon: Demon) => ({
+      ...demon,
+      url: getYoutubeId(demon.url) || '/empty.png'
+    })).sort((a: Demon, b: Demon) => (a.place || 0) - (b.place || 0));
+  }
+  // Для других типов возвращаем пустой массив (заглушка)
+  return [];
 };
 
 export const getLevelById = async (id: number): Promise<Demon> => {
   try {
     const { data } = await axios.get<{ data: Demon }>(`${API_URL}/level/get/${id}`);
-    
     if (!data.data) {
       throw new Error('No data received from server');
     }
-
     return {
       ...data.data,
       url: getYoutubeId(data.data.url) || '/empty.png'

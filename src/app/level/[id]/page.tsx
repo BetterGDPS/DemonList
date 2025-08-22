@@ -27,12 +27,12 @@ export default function Level({ params: { id } }: Props) {
         console.error("Error loading demon:", error);
         toast.error("Failed to load demon data", {
           style: {
-            color: '#778DA9',
-            background: '#1B263B',
+            color: '#7C7C7C',
+            background: '#252525',
           },
           iconTheme: {
-            primary: '#778DA9',
-            secondary: '#1B263B',
+            primary: '#404040',
+            secondary: '#7C7C7C',
           },
         });
         setDemon(null);
@@ -48,12 +48,12 @@ export default function Level({ params: { id } }: Props) {
     navigator.clipboard.writeText(text);
     toast.success(successMessage, {
       style: {
-        color: '#778DA9',
-        background: '#1B263B',
+        color: '#7C7C7C',
+        background: '#252525',
       },
       iconTheme: {
-        primary: '#778DA9',
-        secondary: '#1B263B',
+        primary: '#404040',
+        secondary: '#7C7C7C',
       },
     });
   };
@@ -81,9 +81,7 @@ export default function Level({ params: { id } }: Props) {
       <div className="mt-28 w-[1000px] bg-main-darklight rounded-xl shadow-2xl p-10">
         <span className="flex flex-col justify-center items-center flex-1">
           <span className="flex flex-row items-end">
-            {!unlisted && place && (
-              <h1 className="text-7xl">#{place}</h1>
-            )}
+            <h1 className="text-7xl">#{place}</h1>
             <p className="text-3xl mx-3 mb-2">{name}</p>
           </span>
           <p className="text-white/70 text-xl">by {author}</p>

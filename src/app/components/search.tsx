@@ -6,17 +6,23 @@ import Card from "./card";
 import { getLevels, Demon } from "./levels";
 import { useSearchParams } from 'next/navigation'
 
+const LIST_LABELS: Record<string, string> = {
+  main: "Main List",
+  challenge: "Challenge List",
+  platform: "Platform List"
+};
+
 export default function Search() {
   const [query, setQuery] = useState("");
   const [searchValue, setSearchValue] = useState("");
   const [demons, setDemons] = useState<Demon[]>([]);
   const [filteredDemons, setFilteredDemons] = useState<Demon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [listType, setListType] = useState<'main' | 'unlisted'>('main');
+  const [listType, setListType] = useState<string>('main');
   const searchParams = useSearchParams()
 
   useEffect(() => {
-    const type = searchParams.get('type') === 'unlisted' ? 'unlisted' : 'main';
+    const type = searchParams.get('type') || 'main';
     setListType(type);
   }, [searchParams])
 
@@ -57,7 +63,7 @@ export default function Search() {
     <div className="w-full max-w-screen-lg mx-auto px-2 mt-36 sm:mt-28">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">
-          {listType === 'main' ? 'Main List' : 'Unlisted Levels'}
+          {LIST_LABELS[listType] || "Custom List"}
         </h2>
       </div>
       
