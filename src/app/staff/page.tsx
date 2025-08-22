@@ -80,7 +80,7 @@ export default function page() {
             <div className="p-6 text-center">
               <h3 className="text-3xl font-bold mb-2">Drsdz</h3>
               <p className="text-main-lightlight text-xl">
-                Exposurer
+                Exposer
               </p>
             </div>
           </div>
