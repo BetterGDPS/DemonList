@@ -69,7 +69,7 @@ export function User() {
         <>
             <SignedOut>
                 <SignInButton>
-                    <span className="text-white hover:cursor-pointer hover:text-gray-300">Login</span>
+                    <span className="text-white hover:cursor-pointer hover:text-gray-300 mx-3 mb-2">Login</span>
                 </SignInButton>
             </SignedOut>
 
