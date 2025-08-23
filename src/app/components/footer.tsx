@@ -11,7 +11,7 @@ export default function Footer() {
                 </div>
             </div>
 
-            <hr className="border-t-2 border-main-lightlight my-4" />
+            <hr className="border-t-2 border-main-lightlight my-2" />
 
             <div className="text-main-lightlight text-center text-sm sm:text-base">
                 <h1>BGDPS 2025</h1>

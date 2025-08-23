@@ -9,7 +9,8 @@ import { useSearchParams } from 'next/navigation'
 const LIST_LABELS: Record<string, string> = {
   main: "Main List",
   challenge: "Challenge List",
-  platform: "Platform List"
+  platform: "Platform List",
+  impossible: "Impossible List"
 };
 
 export default function Search() {

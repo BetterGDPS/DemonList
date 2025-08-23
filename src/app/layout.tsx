@@ -4,6 +4,8 @@ import "./globals.css";
 import Header from "./components/header"
 import Footer from "./components/footer";
 import { Toaster } from "react-hot-toast";
+import { ClerkProvider } from '@clerk/nextjs'
+import { dark } from '@clerk/themes';
 
 const kronaOne = Krona_One({
   subsets: ["latin"],
@@ -26,18 +28,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ru">
-      <body className={`${kronaOne.variable} bg-main-bg min-h-screen flex flex-col`}>
-        <Toaster
-          position="bottom-center"
-          reverseOrder={false}
-        />
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider appearance={{ baseTheme: dark }}>
+      <html lang="ru">
+        <body className={`${kronaOne.variable} bg-main-bg min-h-screen flex flex-col`}>
+          <Toaster
+            position="bottom-center"
+            reverseOrder={false}
+          />
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

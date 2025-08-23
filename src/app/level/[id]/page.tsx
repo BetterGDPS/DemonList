@@ -81,30 +81,30 @@ export default function Level({ params: { id } }: Props) {
       <div className="mt-28 w-[1000px] bg-main-darklight rounded-xl shadow-2xl p-10">
         <span className="flex flex-col justify-center items-center flex-1">
           <span className="flex flex-row items-end">
-            <h1 className="text-7xl">#{place}</h1>
-            <p className="text-3xl mx-3 mb-2">{name}</p>
+            <p className="text-3xl mx-3 mb-2">#{place} {name}</p>
           </span>
+          <p className="text-white/70 text-lg">{unlisted} list</p>
           <p className="text-white/70 text-xl">by {author}</p>
         </span>
         <div className="flex justify-center items-center relative">
-          {demon.url?.startsWith('/') ? (
-            <div className="relative w-[500px] h-[200px] mt-4 rounded-xl shadow-2xl bg-main-darklight flex items-center justify-center">
+            {demon.url?.startsWith('/') ? (
+            <div className="relative w-full max-w-[500px] aspect-video mt-4 rounded-xl shadow-2xl bg-main-darklight flex items-center justify-center">
               <p className="text-logo-blue text-3xl font-bold text-center p-4 drop-shadow-xl">
-                {name}
+              {name}
               </p>
             </div>
-          ) : (
-            <iframe
-              width={1920/3}
-              height={1080/3}
-              className="aspect-video rounded-xl mt-4 shadow-2xl"
+            ) : (
+            <div className="w-full max-w-[640px] aspect-video mt-4 rounded-xl shadow-2xl overflow-hidden">
+              <iframe
+              className="w-full h-full rounded-xl"
               src={`https://www.youtube.com/embed/${demon.url}`}
               title={name}
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-            />
-          )}
+              />
+            </div>
+            )}
         </div>
         <section className="flex flex-col items-center mt-6 w-full">
           <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xs sm:max-w-md">
