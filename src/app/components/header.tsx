@@ -53,7 +53,7 @@ export default function Header() {
             <span className="mx-2">GlobalList</span>
           </Link>
 
-          <div className="hidden md:flex flex-wrap w-full sm:w-auto items-center justify-between">
+          <div className="hidden lg:flex flex-wrap w-full sm:w-auto items-center justify-between">
             <div className="flex flex-wrap gap-1 flex-1 min-w-0">
               <div
                 className="relative hover:text-white hover:underline transition-colors duration-200 min-w-[120px] max-w-full"
@@ -122,12 +122,12 @@ export default function Header() {
         </div>
 
         {/* Правая часть: только User */}
-        <div className="flex items-center ml-4">
+        <div className="hidden lg:flex items-center ml-4">
           <User />
         </div>
 
         {/* Мобильное меню справа */}
-        <div className="md:hidden flex items-center ml-auto">
+        <div className="lg:hidden flex items-center ml-auto">
           <button
             onClick={() => setMobileMenu(!mobileMenu)}
             className="p-2 rounded-lg bg-main-darklight hover:bg-main-darklight/80 transition-colors"
@@ -202,7 +202,13 @@ export default function Header() {
           >
             <Send size={26} className="min-w-[26px] min-h-[26px] max-w-[26px] max-h-[26px]" />
             <span>Send Request</span>
-          </a>          
+          </a>
+          
+          <hr className='border-1 m-2 rounded-xl border-white/20'/>
+
+          <div className="w-full flex justify-start items-center border-t border-main-darklight">
+            <User />
+          </div>
         </div>
       )}
     </div>
