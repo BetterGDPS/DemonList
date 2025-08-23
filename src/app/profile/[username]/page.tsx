@@ -10,7 +10,7 @@ export default function Profile({ params }: { params: { username: string } }) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch(`http://localhost:8001/account/get/${params.username}`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/get/${params.username}`);
         if (res.status === 404) {
           setError("Account not found");
           setUsername(null);
