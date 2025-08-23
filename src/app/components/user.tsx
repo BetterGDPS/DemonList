@@ -19,14 +19,13 @@ export function User() {
         return () => document.removeEventListener("click", handler);
     }, []);
 
-    // Эффект для отправки данных на сервер после регистрации/авторизации
     useEffect(() => {
         if (isLoaded && user && !hasSent.current) {
             sendUserDataToServer();
             hasSent.current = true;
         }
         if (!user) {
-            hasSent.current = false; // сбрасываем при логауте
+            hasSent.current = false;
         }
     }, [isLoaded, user]);
 
@@ -39,7 +38,8 @@ export function User() {
                 email: user?.primaryEmailAddress?.emailAddress
             };
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/add`, {
+            // Отправка данных для создания аккаунта
+            const addResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/add`, {
                 method: 'POST',
                 headers: {
                     'accept': 'application/json',
@@ -49,11 +49,31 @@ export function User() {
                 body: JSON.stringify(userData)
             });
 
-            if (response.ok) {
+            if (addResponse.ok) {
                 console.log('Данные пользователя успешно отправлены на сервер');
             } else {
-                console.error('Ошибка при отправке данных:', await response.text());
+                console.error('Ошибка при отправке данных на /account/add:', await addResponse.text());
             }
+
+            // Отправка данных для обновления username
+            if (user?.id && user?.username) {
+                const updateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/update/${user.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'accept': 'application/json',
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ username: user.username })
+                });
+
+                if (updateResponse.ok) {
+                    console.log('Username успешно обновлен на сервере');
+                } else {
+                    console.error('Ошибка при обновлении username:', await updateResponse.text());
+                }
+            }
+
         } catch (error) {
             console.error('Ошибка при отправке данных на сервер:', error);
         }
