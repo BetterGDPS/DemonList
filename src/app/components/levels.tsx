@@ -14,6 +14,7 @@ export type Demon = {
   release: string;
   url: string;
   unlisted?: boolean;
+  list: string; // Добавляем поле для типа списка
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -26,15 +27,24 @@ export const getYoutubeId = (url: string | undefined): string | null => {
 };
 
 export const getLevels = async (type: string = 'main'): Promise<Demon[]> => {
-  if (type === 'main') {
-    const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/main`);
-    return data.data.map((demon: Demon) => ({
-      ...demon,
-      url: getYoutubeId(demon.url) || '/empty.png'
-    })).sort((a: Demon, b: Demon) => (a.place || 0) - (b.place || 0));
+  try {
+    // Получаем все уровни
+    const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/all`);
+    
+    // Фильтруем по типу списка
+    const filteredDemons = data.data
+      .filter((demon: Demon) => demon.list === type)
+      .map((demon: Demon) => ({
+        ...demon,
+        url: getYoutubeId(demon.url) || '/empty.png'
+      }))
+      .sort((a: Demon, b: Demon) => (a.place || 0) - (b.place || 0));
+    
+    return filteredDemons;
+  } catch (error) {
+    console.error("Error loading levels:", error);
+    return [];
   }
-  // Для других типов возвращаем пустой массив (заглушка)
-  return [];
 };
 
 export const getLevelById = async (id: number): Promise<Demon> => {
@@ -50,5 +60,17 @@ export const getLevelById = async (id: number): Promise<Demon> => {
   } catch (error) {
     console.error(`Error fetching level ${id}:`, error);
     throw error;
+  }
+};
+
+// Функция для получения всех доступных списков
+export const getAvailableLists = async (): Promise<string[]> => {
+  try {
+    const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/all`);
+    const uniqueLists = Array.from(new Set(data.data.map(demon => demon.list)));
+    return uniqueLists.filter(list => list); // Убираем пустые значения
+  } catch (error) {
+    console.error("Error loading available lists:", error);
+    return ['main', 'challenge', 'platform', 'impossible']; // Fallback списки
   }
 };

@@ -38,7 +38,6 @@ export function User() {
                 email: user?.primaryEmailAddress?.emailAddress
             };
 
-            // Отправка данных для создания аккаунта
             const addResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/add`, {
                 method: 'POST',
                 headers: {
@@ -55,7 +54,6 @@ export function User() {
                 console.error('Ошибка при отправке данных на /account/add:', await addResponse.text());
             }
 
-            // Отправка данных для обновления username
             if (user?.id && user?.username) {
                 const updateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/update/${user.id}`, {
                     method: 'PUT',

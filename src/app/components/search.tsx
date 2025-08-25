@@ -10,7 +10,7 @@ const LIST_LABELS: Record<string, string> = {
   main: "Main List",
   challenge: "Challenge List",
   platform: "Platform List",
-  impossible: "Impossible List"
+  impossible: "Impossible List",
 };
 
 export default function Search() {
@@ -20,12 +20,12 @@ export default function Search() {
   const [filteredDemons, setFilteredDemons] = useState<Demon[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [listType, setListType] = useState<string>('main');
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     const type = searchParams.get('type') || 'main';
     setListType(type);
-  }, [searchParams])
+  }, [searchParams]);
 
   useEffect(() => {
     const loadDemons = async () => {
@@ -49,7 +49,8 @@ export default function Search() {
       setFilteredDemons(demons);
     } else {
       const filtered = demons.filter(demon =>
-        demon.name.toLowerCase().includes(searchValue.toLowerCase())
+        demon.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        demon.author.toLowerCase().includes(searchValue.toLowerCase())
       );
       setFilteredDemons(filtered);
     }
@@ -64,7 +65,7 @@ export default function Search() {
     <div className="w-full max-w-screen-lg mx-auto px-2 mt-36 sm:mt-28">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">
-          {LIST_LABELS[listType] || "Custom List"}
+          {LIST_LABELS[listType] || `${listType} List`}
         </h2>
       </div>
       
@@ -74,7 +75,7 @@ export default function Search() {
       >
         <input
           type="search"
-          placeholder="Search..."
+          placeholder={`Search in ${LIST_LABELS[listType] || listType}...`}
           value={query}
           onChange={e => setQuery(e.target.value)}
           className="w-full h-12 px-4 bg-main-light text-white placeholder-white/50 outline-none focus:bg-main-light/90"
@@ -92,26 +93,34 @@ export default function Search() {
           <Loader2 className="animate-spin h-20 w-20 text-main-light" />
         </div>
       ) : (
-        <ul className="flex flex-col gap-8">
-          {filteredDemons.length > 0 ? (
-            filteredDemons.map((demon) => (
-              <li key={demon._id}>
-                <Card
-                  id={demon._id}
-                  name={demon.name}
-                  place={demon.place}
-                  author={demon.author}
-                  url={demon.url}
-                  unlisted={demon.unlisted}
-                />
-              </li>
-            ))
-          ) : (
-            <div className="text-center py-8">
-              {searchValue ? "No matching demons found" : "No demons in this list"}
-            </div>
-          )}
-        </ul>
+        <>
+          <div className="text-sm text-gray-400 mb-4">
+            Showing {filteredDemons.length} of {demons.length} levels
+          </div>
+          
+          <ul className="flex flex-col gap-8">
+            {filteredDemons.length > 0 ? (
+              filteredDemons.map((demon) => (
+                <li key={demon._id}>
+                  <Card
+                    id={demon._id}
+                    name={demon.name}
+                    place={demon.place}
+                    author={demon.author}
+                    url={demon.url}
+                    unlisted={demon.unlisted}
+                  />
+                </li>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                {searchValue 
+                  ? "No matching demons found" 
+                  : "No demons in this list yet"}
+              </div>
+            )}
+          </ul>
+        </>
       )}
     </div>
   );
