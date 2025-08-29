@@ -1,6 +1,6 @@
 "use client"
 
-import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser, Settings, Ban } from "lucide-react";
+import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser, Settings, Ban, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { profileApi, RecordType, BadgesType } from "../../components/api/profile";
@@ -64,13 +64,21 @@ const SettingsModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-main-darklight p-6 rounded-lg max-w-md w-full mx-4">
-        <h2 className="text-xl mb-4">Profile Settings</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-main-darklight p-4 sm:p-6 rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl">Profile Settings</h2>
+          <button
+            onClick={onClose}
+            className="p-1 hover:bg-white/10 rounded-full transition-colors"
+          >
+            <X className="w-6 h-6" />
+          </button>
+        </div>
         
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-sm sm:text-base">
               <Monitor className="w-5 h-5" />
               PC Player
             </label>
@@ -84,7 +92,7 @@ const SettingsModal = ({
           </div>
           
           <div className="flex items-center justify-between">
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-sm sm:text-base">
               <TabletSmartphone className="w-5 h-5" />
               Mobile Player
             </label>
@@ -101,7 +109,7 @@ const SettingsModal = ({
         <div className="mt-6 flex justify-end">
           <button
             onClick={onClose}
-            className="bg-main-light/50 hover:bg-main-light/30 px-4 py-2 rounded transition-colors"
+            className="bg-main-light/50 hover:bg-main-light/30 px-4 py-2 rounded transition-colors text-sm sm:text-base"
             disabled={isLoading}
           >
             Close
@@ -123,6 +131,18 @@ export default function Profile({ params }: { params: { username: string } }) {
   const [records, setRecords] = useState<RecordType[] | null>(null);
   const [badges, setBadges] = useState<BadgesType | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isTabletView, setIsTabletView] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsTabletView(window.innerWidth < 768);
+    };
+
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   useEffect(() => {
     async function fetchUser() {
@@ -167,107 +187,164 @@ export default function Profile({ params }: { params: { username: string } }) {
   const isOwnProfile = isClerkLoaded && clerkUser && userID === clerkUser.id;
 
   return (
-    <div className="mt-28 text-center">
-      {error ? error : username ? (
-        <div className="flex flex-col gap-6">
-          <div className="flex gap-2 justify-center items-center flex-col bg-main-darklight p-6 rounded-lg mx-auto max-w-[500px] w-full">
-            <div className="flex items-center gap-1">
-              <span className={`text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>{username}</span>
-              {badges && (
-                <span className="flex gap-1 ml-1">
-                  {badges.owner && <Crown className="w-6 h-6 text-badges-owner"/>}
-                  {badges.dev && <Code2 className="w-6 h-6 text-badges-code"/>}
-                  {badges.staff && <ShieldUser className="w-6 h-6 text-badges-staff"/>}
-                  {badges.banned && <Ban className="w-6 h-6 text-badges-ban"/>}
-                  {badges.pc && <Monitor className="w-6 h-6"/>}
-                  {badges.mobile && <TabletSmartphone className="w-6 h-6"/>}
+    <div className="mt-20 sm:mt-28 text-center px-4">
+      {error ? (
+        <div className="text-red-400 text-lg">{error}</div>
+      ) : username ? (
+        <div className="flex flex-col gap-4 sm:gap-6">
+          {/* Profile Card */}
+          <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
+            <div className="flex flex-col items-center gap-3">
+              <div className="flex items-center gap-2 flex-wrap justify-center">
+                <span className={`text-lg sm:text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>
+                  {username}
                 </span>
-              )}
-              {isOwnProfile && (
-                <button 
-                  onClick={() => setIsSettingsOpen(true)}
-                  className="ml-2 p-1 bg-main-bg/50 hover:bg-white/10 rounded transition-colors"
-                  title="Profile Settings"
-                >
-                  <Settings className="w-6 h-6" />
-                </button>
-              )}
-            </div>
-
-            <hr className="border-white/20 border-1 w-96 m-2"/>
-
-            <div className="flex flex-row gap-4 gap-x-12">
-              <div className="flex flex-col">
-                <span className="text-sm text-white/80">Place</span>
-                <span>{place ? place : "-"}</span>
+                {badges && (
+                  <span className="flex gap-1 flex-wrap justify-center">
+                    {badges.owner && <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-badges-owner"/>}
+                    {badges.dev && <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-badges-code"/>}
+                    {badges.staff && <ShieldUser className="w-5 h-5 sm:w-6 sm:h-6 text-badges-staff"/>}
+                    {badges.banned && <Ban className="w-5 h-5 sm:w-6 sm:h-6 text-badges-ban"/>}
+                    {badges.pc && <Monitor className="w-5 h-5 sm:w-6 sm:h-6"/>}
+                    {badges.mobile && <TabletSmartphone className="w-5 h-5 sm:w-6 sm:h-6"/>}
+                  </span>
+                )}
+                {isOwnProfile && (
+                  <button 
+                    onClick={() => setIsSettingsOpen(true)}
+                    className="p-1 bg-main-bg/50 hover:bg-white/10 rounded transition-colors"
+                    title="Profile Settings"
+                  >
+                    <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
+                  </button>
+                )}
               </div>
 
-              <div className="flex flex-col">
-                <span className="text-sm text-white/80">Name on BGDPS</span>
-                <span>{name ? name : "-"}</span>
-              </div>
+              <hr className="border-white/20 border-1 w-full max-w-sm m-2"/>
 
-              <div className="flex flex-col">
-                <span className="text-sm text-white/80">Hardest</span>
-                <span>{hardest ? hardest : "-"}</span>
+              <div className="grid grid-cols-2 sm:flex sm:flex-row gap-4 sm:gap-x-12 w-full justify-center">
+                <div className="flex flex-col">
+                  <span className="text-sm text-white/80">Place</span>
+                  <span className="text-base">{place ? place : "-"}</span>
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="text-sm text-white/80">Name</span>
+                  <span className="text-base">{name ? name : "-"}</span>
+                </div>
+
+                <div className="flex flex-col col-span-2 sm:col-auto">
+                  <span className="text-sm text-white/80">Hardest</span>
+                  <span className="text-base">{hardest ? hardest : "-"}</span>
+                </div>
               </div>
             </div>
           </div>
 
-          <div className="flex gap-2 justify-center items-center flex-col bg-main-darklight p-6 rounded-lg mx-auto max-w-[500px] w-full">
-            <span className="text-xl">Records</span>
+          {/* Records Card */}
+          <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
+            <span className="text-lg sm:text-xl">Records</span>
                         
-            <div className="w-full">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="text-left border-b border-white/20">
-                    <th className="p-2 font-medium">Level</th>
-                    <th className="p-2 font-medium">Progress</th>
-                    <th className="p-2 font-medium">Status</th>
-                    <th className="p-2 font-medium">Video</th>
-                  </tr>
-                </thead>
-                <tbody>
+            <div className="w-full mt-4 overflow-x-auto">
+              {isTabletView ? (
+                // Mobile/Tablet View
+                <div className="space-y-3">
                   {records && records.length > 0 ? (
                     records.map((record, index) => (
-                      <tr key={index} className="border-b border-white/10">
-                        {record.level !== undefined && (
-                          <>
-                            <td className="p-2">
-                              <a 
-                                href={`/level/${record.levelId}`}
-                                className="text-blue-400 hover:text-blue-300 hover:underline transition-colors"
-                              >
-                                {record.level}
-                              </a>
-                            </td>
-                            <td className="p-2 w-32">
-                              <ProgressBar progress={record.progress} />
-                            </td>
-                            <td className="p-2">{record.status}</td>
-                            <td className="flex justify-center items-center p-2">
-                              <a 
-                                href={record.video ? record.video : ""} 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex justify-center bg-blue-400 hover:bg-blue-500 transition-colors rounded-lg w-16"
-                              >
-                                <Triangle className="rotate-90 m-0.5"/>
-                              </a>
-                            </td>
-                          </>
-                        )}
-                      </tr>
+                      record.level !== undefined && (
+                        <div key={index} className="bg-main-bg/30 p-3 rounded-lg">
+                          <div className="flex justify-between items-start mb-2">
+                            <a 
+                              href={`/level/${record.levelId}`}
+                              className="text-blue-400 hover:text-blue-300 hover:underline transition-colors text-sm font-medium"
+                            >
+                              {record.level}
+                            </a>
+                            <span className="text-xs bg-white/10 px-2 py-1 rounded">
+                              {record.status}
+                            </span>
+                          </div>
+                          
+                          <div className="mb-3">
+                            <div className="text-xs text-white/70 mb-1">Progress</div>
+                            <ProgressBar progress={record.progress} />
+                          </div>
+                          
+                          {record.video && (
+                            <a 
+                              href={record.video} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-center gap-1 bg-blue-400 hover:bg-blue-500 transition-colors rounded-lg py-1 px-3 text-sm"
+                            >
+                              <Triangle className="rotate-90 w-3 h-3"/>
+                              Video
+                            </a>
+                          )}
+                        </div>
+                      )
                     ))
                   ) : (
-                    <tr>
-                      <td colSpan={4} className="p-4 text-center text-white/60">
-                        No records found
-                      </td>
-                    </tr>
+                    <div className="p-4 text-center text-white/60">
+                      No records found
+                    </div>
                   )}
-                </tbody>
-              </table>
+                </div>
+              ) : (
+                // Desktop View
+                <table className="w-full border-collapse">
+                  <thead>
+                    <tr className="text-left border-b border-white/20">
+                      <th className="p-2 font-medium text-sm sm:text-base">Level</th>
+                      <th className="p-2 font-medium text-sm sm:text-base">Progress</th>
+                      <th className="p-2 font-medium text-sm sm:text-base">Status</th>
+                      <th className="p-2 font-medium text-sm sm:text-base">Video</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {records && records.length > 0 ? (
+                      records.map((record, index) => (
+                        <tr key={index} className="border-b border-white/10">
+                          {record.level !== undefined && (
+                            <>
+                              <td className="p-2">
+                                <a 
+                                  href={`/level/${record.levelId}`}
+                                  className="text-blue-400 hover:text-blue-300 hover:underline transition-colors text-sm sm:text-base"
+                                >
+                                  {record.level}
+                                </a>
+                              </td>
+                              <td className="p-2 w-32">
+                                <ProgressBar progress={record.progress} />
+                              </td>
+                              <td className="p-2 text-sm sm:text-base">{record.status}</td>
+                              <td className="flex justify-center items-center p-2">
+                                {record.video && (
+                                  <a 
+                                    href={record.video} 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    className="flex justify-center bg-blue-400 hover:bg-blue-500 transition-colors rounded-lg w-16 py-1"
+                                  >
+                                    <Triangle className="rotate-90 m-0.5"/>
+                                  </a>
+                                )}
+                              </td>
+                            </>
+                          )}
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={4} className="p-4 text-center text-white/60">
+                          No records found
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
 
@@ -280,7 +357,7 @@ export default function Profile({ params }: { params: { username: string } }) {
         </div>
       ) : 
         <div className="flex justify-center items-center py-20">
-          <Loader2 className="animate-spin h-20 w-20 text-main-light" />
+          <Loader2 className="animate-spin h-16 w-16 sm:h-20 sm:w-20 text-main-light" />
         </div>
       }
     </div>

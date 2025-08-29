@@ -87,7 +87,9 @@ export default function PlayerTop() {
             </span>
             <div className="flex-1">
               <span className="text-lg font-semibold text-white">
-                {player.name ? player.name : player.username}
+                {player.name ? player.name : (
+                  <a href={`/profile/${player.username}`} className='hover:underline hover:text-white/80'>{player.username}</a>
+                )}
               </span>
               {player.name != undefined && (
                 <a className="text-sm text-white/50 ml-2 hover:underline hover:text-white/30" href={`/profile/${player.username}`}>

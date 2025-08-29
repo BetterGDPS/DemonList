@@ -25,7 +25,7 @@ export default function page() {
             </div>
           </div>
 
-          <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
+          <a className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center" href="/profile/kenyka">
             <div className="flex justify-center pt-2">
               <div className="relative w-52 h-52">
                 <Image
@@ -43,9 +43,9 @@ export default function page() {
                 GlobalList Developer
               </p>
             </div>
-          </div>
+          </a>
 
-          <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
+          <a className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center" href='/profile/troil'>
             <div className="flex justify-center pt-2">
               <div className="relative w-52 h-52">
                 <Image
@@ -63,9 +63,9 @@ export default function page() {
                 GlobalList Owner
               </p>
             </div>
-          </div>
+          </a>
 
-          <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
+          <a className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center" href='/profile/drsdz'>
             <div className="flex justify-center pt-2">
               <div className="relative w-52 h-52">
                 <Image
@@ -83,7 +83,7 @@ export default function page() {
                 Exposer
               </p>
             </div>
-          </div>
+          </a>
 
           <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
             <div className="flex justify-center pt-2">
