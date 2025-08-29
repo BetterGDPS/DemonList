@@ -14,7 +14,7 @@ export type Demon = {
   release: string;
   url: string;
   unlisted?: boolean;
-  list: string; // Добавляем поле для типа списка
+  list: string;
 };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
@@ -28,10 +28,8 @@ export const getYoutubeId = (url: string | undefined): string | null => {
 
 export const getLevels = async (type: string = 'main'): Promise<Demon[]> => {
   try {
-    // Получаем все уровни
     const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/all`);
     
-    // Фильтруем по типу списка
     const filteredDemons = data.data
       .filter((demon: Demon) => demon.list === type)
       .map((demon: Demon) => ({
@@ -63,14 +61,13 @@ export const getLevelById = async (id: number): Promise<Demon> => {
   }
 };
 
-// Функция для получения всех доступных списков
 export const getAvailableLists = async (): Promise<string[]> => {
   try {
     const { data } = await axios.get<{ data: Demon[] }>(`${API_URL}/level/all`);
     const uniqueLists = Array.from(new Set(data.data.map(demon => demon.list)));
-    return uniqueLists.filter(list => list); // Убираем пустые значения
+    return uniqueLists.filter(list => list);
   } catch (error) {
     console.error("Error loading available lists:", error);
-    return ['main', 'challenge', 'platform', 'impossible']; // Fallback списки
+    return ['main', 'challenge', 'platform', 'impossible'];
   }
 };

@@ -22,6 +22,19 @@ const config: Config = {
           green: "#83FF92",
           blue: "#72A3FF",
           red: "#FA5170"
+        },
+        top: {
+          gold: "#D8BD65",
+          silver: "#B3B3B3",
+          bronze: "#D8A66E",
+          copper: "#B56C5A",
+          wood: "#6D4925"
+        },
+        badges: {
+          code: "#A2A3FF",
+          owner: "#FFE552",
+          staff: "#FF828E",
+          ban: "#ff5151"
         }
       },
     },

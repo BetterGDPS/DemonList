@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { getLevelById, Demon } from "../../components/levels";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 type Props = {
   params: {
@@ -88,9 +89,16 @@ export default function Level({ params: { id } }: Props) {
         </span>
         <div className="flex justify-center items-center relative">
             {demon.url?.startsWith('/') ? (
-            <div className="relative w-full max-w-[500px] aspect-video mt-4 rounded-xl shadow-2xl bg-main-darklight flex items-center justify-center">
-              <p className="text-logo-blue text-3xl font-bold text-center p-4 drop-shadow-xl">
-              {name}
+            <div className="relative w-full max-w-[500px] aspect-video mt-4 rounded-xl shadow-2xl bg-main-darklight flex items-center justify-center overflow-hidden">
+              <Image
+                src="/empty.png"
+                alt="Background"
+                fill
+                className="object-cover opacity-30"
+                priority
+              />
+              <p className="text-main-lightlight text-3xl font-bold text-center p-4 drop-shadow-xl relative z-10">
+                {name}
               </p>
             </div>
             ) : (

@@ -1,5 +1,6 @@
 "use client";
 
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 interface Player {
@@ -58,7 +59,11 @@ export default function PlayerTop() {
   }, []);
 
   if (loading) {
-    return <div className="mt-24 text-center">Loading leaderboard...</div>;
+    return (
+      <div className="flex justify-center items-center mt-36">
+        <Loader2 className="animate-spin h-20 w-20 text-main-light" />
+      </div>
+    );
   }
 
   if (error) {
@@ -80,20 +85,26 @@ export default function PlayerTop() {
   return (
     <div className="mt-24 mx-auto max-w-2xl">
       <h1 className="text-3xl font-bold text-center mb-8">Leaderboard</h1>
-      <div className="bg-main-darklight rounded-lg shadow-md p-1 hover:scale-105 transition-transform">
+      <div className="bg-main-darklight rounded-lg shadow-md p-1 transition-transform">
         {players.map((player) => (
           <div key={`${player.username}-${player.place}`} className="flex items-center py-3 border-b border-gray-200 last:border-b-0">
-            <span className="text-xl font-bold text-white w-12 text-right mr-4">
+            <span className={`text-xl font-bold w-12 text-right mr-4 ${
+              player.place === 1 ? 'text-top-gold' : 
+              player.place === 2 ? 'text-top-silver' : 
+              player.place === 3 ? 'text-top-bronze' :
+              player.place === 4 ? 'text-top-copper' :
+              player.place === 5 ? 'text-top-wood' : 'text-white'
+            }`}>
               {player.place}.
             </span>
             <div className="flex-1">
               <span className="text-lg font-semibold text-white">
-                {player.name || player.username}
+                {player.name ? player.name : player.username}
               </span>
-              {player.name && player.username && player.name !== player.username && (
-                <span className="text-sm text-white/50 ml-2">
+              {player.name != undefined && (
+                <a className="text-sm text-white/50 ml-2 hover:underline hover:text-white/30" href={`/profile/${player.username}`}>
                   ({player.username})
-                </span>
+                </a>
               )}
             </div>
           </div>
