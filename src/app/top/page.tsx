@@ -2,17 +2,12 @@
 
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { leaderboardApi } from '../components/api/leaderboard';
 
 interface Player {
   username: string;
   name: string | null;
   place: number | null;
-}
-
-interface ApiResponse {
-  data: Player[];
-  status?: string; // делаем необязательным
-  count?: number;
 }
 
 export default function PlayerTop() {
@@ -24,23 +19,15 @@ export default function PlayerTop() {
     const fetchLeaderboard = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/leaderboard`);
         
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result: ApiResponse = await response.json();
+        const result = await leaderboardApi.getLeaderboard();
         console.log('API Response:', result);
         
-        // Проверяем наличие data массива в ответе
         if (result.data && Array.isArray(result.data)) {
-          // Фильтруем игроков: убираем тех, у кого нет места (place) или place = null/0
           const filteredPlayers = result.data.filter(player => 
             player.place !== null && player.place !== undefined && player.place !== 0
           );
           
-          // Сортируем по месту (по возрастанию)
           const sortedPlayers = filteredPlayers.sort((a, b) => (a.place || Infinity) - (b.place || Infinity));
           setPlayers(sortedPlayers);
         } 
@@ -48,8 +35,9 @@ export default function PlayerTop() {
           console.error('Invalid response format - missing data array:', result);
           throw new Error('Server returned invalid data format');
         }
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to fetch leaderboard');
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        setError(err.response?.data?.message || err.message || 'Failed to fetch leaderboard');
       } finally {
         setLoading(false);
       }

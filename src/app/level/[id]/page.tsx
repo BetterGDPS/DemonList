@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { getLevelById, Demon } from "../../components/levels";
+import { getLevelById, Demon } from "../../components/api/levels";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 

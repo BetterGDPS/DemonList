@@ -3,23 +3,7 @@
 import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser, Settings, Ban } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-
-type RecordType = {
-  levelId: string;
-  level: string;
-  progress: number;
-  status: string;
-  video: string;
-}
-
-type BadgesType = {
-  pc: boolean;
-  mobile: boolean;
-  dev: boolean;
-  owner: boolean;
-  staff: boolean;
-  banned: boolean;
-}
+import { profileApi, RecordType, BadgesType } from "../../components/api/profile";
 
 const ProgressBar = ({ progress }: { progress: number }) => {
   const isComplete = progress === 100;
@@ -66,18 +50,7 @@ const SettingsModal = ({
     
     setIsLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/update_badge/${userId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          badge_name: badgeName,
-          badge_value: badgeValue
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to update badge");
+      await profileApi.updateBadge(userId, badgeName, badgeValue);
       
       if (badgeName === "pc") setPcBadge(badgeValue);
       if (badgeName === "mobile") setMobileBadge(badgeValue);
@@ -154,15 +127,8 @@ export default function Profile({ params }: { params: { username: string } }) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/get/${params.username}`);
-        if (res.status === 404) {
-          setError("Account not found");
-          setUsername(null);
-          return;
-        }
-        if (!res.ok) throw new Error("Network response was not ok");
+        const data = await profileApi.getUserProfile(params.username);
         
-        const data = await res.json();
         setUsername(data.username);
         setName(data.name);
         setUserID(data._id);
@@ -184,8 +150,13 @@ export default function Profile({ params }: { params: { username: string } }) {
           banned: data.place === 0
         });
         setError(null);
-      } catch (err) {
-        setError((err as Error).message);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } catch (err: any) {
+        if (err.response?.status === 404) {
+          setError("Account not found");
+        } else {
+          setError(err.response?.data?.message || err.message || "Failed to fetch profile");
+        }
         setUsername(null);
       }
     }

@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Loader2, Search as SearchIcon } from "lucide-react";
 import Card from "./card";
-import { getLevels, Demon } from "./levels";
+import { getLevels, Demon } from "../components/api/levels";
 import { useSearchParams } from 'next/navigation'
 
 const LIST_LABELS: Record<string, string> = {

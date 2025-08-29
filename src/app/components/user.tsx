@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
-import { SignedOut, SignInButton, UserButton, useUser, useAuth } from "@clerk/nextjs";
+import { SignedOut, SignInButton, UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { userApi } from "./api/user";
 
 export function User() {
     const { user, isLoaded } = useUser();
-    const { getToken } = useAuth();
     const router = useRouter();
     const hasSent = useRef(false);
 
@@ -31,44 +31,27 @@ export function User() {
 
     const sendUserDataToServer = async () => {
         try {
-            const token = await getToken();
             const userData = {
                 id: user?.id,
-                username: user?.username,
+                username: user?.username || undefined,
                 email: user?.primaryEmailAddress?.emailAddress
             };
 
-            const addResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/add`, {
-                method: 'POST',
-                headers: {
-                    'accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(userData)
-            });
-
-            if (addResponse.ok) {
+            // Отправляем данные пользователя
+            const addResponse = await userApi.addUser(userData);
+            if (addResponse.status === 200) {
                 console.log('Данные пользователя успешно отправлены на сервер');
             } else {
-                console.error('Ошибка при отправке данных на /account/add:', await addResponse.text());
+                console.error('Ошибка при отправке данных на /account/add:', addResponse.statusText);
             }
 
+            // Обновляем username если нужно
             if (user?.id && user?.username) {
-                const updateResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/account/update/${user.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'accept': 'application/json',
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ username: user.username })
-                });
-
-                if (updateResponse.ok) {
+                const updateResponse = await userApi.updateUsername(user.id, user.username);
+                if (updateResponse.status === 200) {
                     console.log('Username успешно обновлен на сервере');
                 } else {
-                    console.error('Ошибка при обновлении username:', await updateResponse.text());
+                    console.error('Ошибка при обновлении username:', updateResponse.statusText);
                 }
             }
 
