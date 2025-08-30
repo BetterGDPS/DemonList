@@ -1,6 +1,6 @@
 "use client"
 
-import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser, Settings, Ban, X } from "lucide-react";
+import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser, Settings, Ban, X, FlaskConical } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { profileApi, RecordType, BadgesType } from "../../components/api/profile";
@@ -27,37 +27,91 @@ const SettingsModal = ({
   isOpen, 
   onClose, 
   badges,
-  userId 
+  userId,
+  about: initialAbout // Добавляем пропс about
 }: { 
   isOpen: boolean; 
   onClose: () => void;
   badges: BadgesType | null;
   userId: string | null;
+  about: string | null; // Добавляем пропс about
 }) => {
   const [pcBadge, setPcBadge] = useState(false);
   const [mobileBadge, setMobileBadge] = useState(false);
+  const [aboutText, setAboutText] = useState("");
+  const [originalAboutText, setOriginalAboutText] = useState("");
+  const [originalPcBadge, setOriginalPcBadge] = useState(false);
+  const [originalMobileBadge, setOriginalMobileBadge] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   useEffect(() => {
     if (badges) {
       setPcBadge(badges.pc);
       setMobileBadge(badges.mobile);
+      setOriginalPcBadge(badges.pc);
+      setOriginalMobileBadge(badges.mobile);
     }
-  }, [badges]);
+    setAboutText(initialAbout || "");
+    setOriginalAboutText(initialAbout || "");
+  }, [badges, initialAbout]);
 
-  const handleBadgeUpdate = async (badgeName: string, badgeValue: boolean) => {
+  useEffect(() => {
+    const badgesChanged = pcBadge !== originalPcBadge || mobileBadge !== originalMobileBadge;
+    const aboutChanged = aboutText !== originalAboutText;
+    setHasUnsavedChanges(badgesChanged || aboutChanged);
+  }, [pcBadge, mobileBadge, aboutText, originalPcBadge, originalMobileBadge, originalAboutText]);
+
+  const handleAboutChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAboutText(e.target.value);
+  };
+
+  const handleBadgeToggle = (badgeName: string, newValue: boolean) => {
+    if (badgeName === "pc") setPcBadge(newValue);
+    if (badgeName === "mobile") setMobileBadge(newValue);
+  };
+
+  const handleSave = async () => {
     if (!userId) return;
     
     setIsLoading(true);
     try {
-      await profileApi.updateBadge(userId, badgeName, badgeValue);
+      if (pcBadge !== originalPcBadge) {
+        await profileApi.updateBadge(userId, "pc", pcBadge);
+        setOriginalPcBadge(pcBadge);
+      }
+      if (mobileBadge !== originalMobileBadge) {
+        await profileApi.updateBadge(userId, "mobile", mobileBadge);
+        setOriginalMobileBadge(mobileBadge);
+      }
       
-      if (badgeName === "pc") setPcBadge(badgeValue);
-      if (badgeName === "mobile") setMobileBadge(badgeValue);
+      // Update about text if changed
+      if (aboutText !== originalAboutText) {
+        await profileApi.updateAbout(userId, aboutText);
+        setOriginalAboutText(aboutText);
+      }
+      
+      onClose();
     } catch (err) {
-      console.error("Error updating badge:", err);
+      console.error("Error updating profile:", err);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleClose = () => {
+    if (hasUnsavedChanges) {
+      const confirmClose = window.confirm("You have unsaved changes. Are you sure you want to close without saving?");
+      if (confirmClose) {
+        if (badges) {
+          setPcBadge(originalPcBadge);
+          setMobileBadge(originalMobileBadge);
+        }
+        setAboutText(originalAboutText);
+        onClose();
+      }
+    } else {
+      onClose();
     }
   };
 
@@ -69,7 +123,7 @@ const SettingsModal = ({
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl">Profile Settings</h2>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-1 hover:bg-white/10 rounded-full transition-colors"
           >
             <X className="w-6 h-6" />
@@ -77,6 +131,21 @@ const SettingsModal = ({
         </div>
         
         <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Note (max 25 characters)</label>
+            <textarea
+              value={aboutText}
+              onChange={handleAboutChange}
+              maxLength={25}
+              rows={3}
+              className="w-full bg-main-bg/50 border border-white/20 rounded p-2 text-sm resize-none"
+              placeholder="Tell others a bit about yourself..."
+            />
+            <div className="text-xs text-white/60 text-right mt-1">
+              {aboutText.length}/25
+            </div>
+          </div>
+          
           <div className="flex items-center justify-between">
             <label className="flex items-center gap-2 text-sm sm:text-base">
               <Monitor className="w-5 h-5" />
@@ -85,7 +154,7 @@ const SettingsModal = ({
             <input
               type="checkbox"
               checked={pcBadge}
-              onChange={(e) => handleBadgeUpdate("pc", e.target.checked)}
+              onChange={(e) => handleBadgeToggle("pc", e.target.checked)}
               disabled={isLoading}
               className="h-5 w-5 rounded"
             />
@@ -99,20 +168,27 @@ const SettingsModal = ({
             <input
               type="checkbox"
               checked={mobileBadge}
-              onChange={(e) => handleBadgeUpdate("mobile", e.target.checked)}
+              onChange={(e) => handleBadgeToggle("mobile", e.target.checked)}
               disabled={isLoading}
               className="h-5 w-5 rounded"
             />
           </div>
         </div>
         
-        <div className="mt-6 flex justify-end">
+        <div className="mt-6 flex justify-end gap-2">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="bg-main-light/50 hover:bg-main-light/30 px-4 py-2 rounded transition-colors text-sm sm:text-base"
             disabled={isLoading}
           >
-            Close
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={isLoading || !hasUnsavedChanges}
+            className="bg-main-light hover:bg-main-light/80 px-4 py-2 rounded transition-colors text-sm sm:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isLoading ? "Saving..." : "Save Changes"}
           </button>
         </div>
       </div>
@@ -127,6 +203,7 @@ export default function Profile({ params }: { params: { username: string } }) {
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [hardest, setHardest] = useState<string | null>(null);
+  const [about, setAbout] = useState<string | null>(null);
   const [place, setPlace] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordType[] | null>(null);
   const [badges, setBadges] = useState<BadgesType | null>(null);
@@ -154,6 +231,7 @@ export default function Profile({ params }: { params: { username: string } }) {
         setUserID(data._id);
         setHardest(data.hardest);
         setPlace(data.place);
+        setAbout(data.about || null);
 
         if (data.records && typeof data.records === 'object' && data.records !== null) {
           const recordsArray = Object.entries(data.records).map(([levelId, recordData]) => ({
@@ -192,7 +270,6 @@ export default function Profile({ params }: { params: { username: string } }) {
         <div className="text-red-400 text-lg">{error}</div>
       ) : username ? (
         <div className="flex flex-col gap-4 sm:gap-6">
-          {/* Profile Card */}
           <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
             <div className="flex flex-col items-center gap-3">
               <div className="flex items-center gap-2 flex-wrap justify-center">
@@ -204,6 +281,7 @@ export default function Profile({ params }: { params: { username: string } }) {
                     {badges.owner && <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-badges-owner"/>}
                     {badges.dev && <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-badges-code"/>}
                     {badges.staff && <ShieldUser className="w-5 h-5 sm:w-6 sm:h-6 text-badges-staff"/>}
+                    {badges.test && <FlaskConical className="w-5 h-5 sm:w-6 sm:h-6 text-badges-test"/>}
                     {badges.banned && <Ban className="w-5 h-5 sm:w-6 sm:h-6 text-badges-ban"/>}
                     {badges.pc && <Monitor className="w-5 h-5 sm:w-6 sm:h-6"/>}
                     {badges.mobile && <TabletSmartphone className="w-5 h-5 sm:w-6 sm:h-6"/>}
@@ -219,6 +297,11 @@ export default function Profile({ params }: { params: { username: string } }) {
                   </button>
                 )}
               </div>
+              {about && 
+                <span className="text-sm text-white/70 break-keep italic">
+                  {about}
+                </span>
+              }
 
               <hr className="border-white/20 border-1 w-full max-w-sm m-2"/>
 
@@ -241,13 +324,11 @@ export default function Profile({ params }: { params: { username: string } }) {
             </div>
           </div>
 
-          {/* Records Card */}
           <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
             <span className="text-lg sm:text-xl">Records</span>
                         
             <div className="w-full mt-4 overflow-x-auto">
               {isTabletView ? (
-                // Mobile/Tablet View
                 <div className="space-y-3">
                   {records && records.length > 0 ? (
                     records.map((record, index) => (
@@ -291,7 +372,6 @@ export default function Profile({ params }: { params: { username: string } }) {
                   )}
                 </div>
               ) : (
-                // Desktop View
                 <table className="w-full border-collapse">
                   <thead>
                     <tr className="text-left border-b border-white/20">
@@ -353,6 +433,7 @@ export default function Profile({ params }: { params: { username: string } }) {
             onClose={() => setIsSettingsOpen(false)} 
             badges={badges}
             userId={userID}
+            about={about}
           />
         </div>
       ) : 

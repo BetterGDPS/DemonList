@@ -34,7 +34,8 @@ const config: Config = {
           code: "#A2A3FF",
           owner: "#FFE552",
           staff: "#FF828E",
-          ban: "#ff5151"
+          ban: "#ff5151",
+          test: "#8cf576"
         }
       },
     },

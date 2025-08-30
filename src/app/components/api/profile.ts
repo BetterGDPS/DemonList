@@ -19,6 +19,7 @@ export interface BadgesType {
   owner: boolean;
   staff: boolean;
   banned: boolean;
+  test: boolean;
 }
 
 export interface UserProfileData {
@@ -27,6 +28,7 @@ export interface UserProfileData {
   _id: string;
   hardest: string | null;
   place: number | null;
+  about: string | null; 
   records: Record<string, Omit<RecordType, 'levelId'>> | null;
   badges: Omit<BadgesType, 'banned'>;
 }
@@ -41,6 +43,13 @@ export const profileApi = {
     const response = await api.put(`/account/update_badge/${userId}`, {
       badge_name: badgeName,
       badge_value: badgeValue
+    });
+    return response.data;
+  },
+
+  updateAbout: async (userId: string, aboutText: string) => {
+    const response = await api.put(`/account/update/${userId}`, {
+      about: aboutText
     });
     return response.data;
   },
