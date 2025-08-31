@@ -89,7 +89,7 @@ export default function PlayerTop() {
             </span>
             <div className="flex items-center">
               {player.country && (
-                <Twemoji options={{ className: 'twemoji' }} className="w-6 h-6 mr-2 select-none">
+                <Twemoji options={{ className: 'twemoji w-6 h-6 mr-2 select-none' }}>
                   <span>
                     {player.country}
                   </span>

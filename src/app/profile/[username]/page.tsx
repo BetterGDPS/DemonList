@@ -296,7 +296,7 @@ export default function Profile({ params }: { params: { username: string } }) {
                 />
                 <span className={`flex items-center text-lg sm:text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>
                   {username}
-                  <Twemoji options={{ className: 'twemoji' }} className="w-6 h-6 mx-1 select-none">
+                  <Twemoji options={{ className: 'twemoji w-6 h-6 mx-1 select-none' }}>
                     {badges && badges.country && 
                       <span>{badges.country}</span>
                     }
