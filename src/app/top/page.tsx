@@ -3,11 +3,13 @@
 import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { leaderboardApi } from '../components/api/leaderboard';
+import Twemoji from 'react-twemoji';
 
 interface Player {
   username: string;
   name: string | null;
   place: number | null;
+  country: string | null;
 }
 
 export default function PlayerTop() {
@@ -85,7 +87,14 @@ export default function PlayerTop() {
             }`}>
               {player.place}.
             </span>
-            <div className="flex-1">
+            <div className="flex items-center">
+              {player.country && (
+                <Twemoji options={{ className: 'twemoji' }} className="w-6 h-6 mr-2 select-none">
+                  <span>
+                    {player.country}
+                  </span>
+                </Twemoji>
+              )}
               <span className="text-lg font-semibold text-white">
                 {player.name ? player.name : (
                   <a href={`/profile/${player.username}`} className='hover:underline hover:text-white/80'>{player.username}</a>

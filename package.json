@@ -17,12 +17,14 @@
     "react": "^18",
     "react-dom": "^18",
     "react-hot-toast": "^2.5.2",
+    "react-twemoji": "^0.6.0",
     "shared": "^0.2.0"
   },
   "devDependencies": {
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/react-twemoji": "^0.4.3",
     "eslint": "^8",
     "eslint-config-next": "14.2.30",
     "postcss": "^8",

@@ -10,6 +10,7 @@ export const leaderboardApi = {
       username: string;
       name: string | null;
       place: number | null;
+      country: string | null;
     }[];
     status?: string;
     count?: number;

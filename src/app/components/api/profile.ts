@@ -20,6 +20,7 @@ export interface BadgesType {
   staff: boolean;
   banned: boolean;
   test: boolean;
+  country: string;
 }
 
 export interface UserProfileData {
@@ -28,7 +29,8 @@ export interface UserProfileData {
   _id: string;
   hardest: string | null;
   place: number | null;
-  about: string | null; 
+  about: string | null;
+  avatar: string | null;
   records: Record<string, Omit<RecordType, 'levelId'>> | null;
   badges: Omit<BadgesType, 'banned'>;
 }

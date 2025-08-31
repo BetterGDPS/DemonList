@@ -34,10 +34,10 @@ export function User() {
             const userData = {
                 id: user?.id,
                 username: user?.username || undefined,
-                email: user?.primaryEmailAddress?.emailAddress
+                email: user?.primaryEmailAddress?.emailAddress,
+                avatar: user?.imageUrl,
             };
 
-            // Отправляем данные пользователя
             const addResponse = await userApi.addUser(userData);
             if (addResponse.status === 200) {
                 console.log('Данные пользователя успешно отправлены на сервер');
@@ -45,14 +45,11 @@ export function User() {
                 console.error('Ошибка при отправке данных на /account/add:', addResponse.statusText);
             }
 
-            // Обновляем username если нужно
-            if (user?.id && user?.username) {
-                const updateResponse = await userApi.updateUsername(user.id, user.username);
-                if (updateResponse.status === 200) {
-                    console.log('Username успешно обновлен на сервере');
-                } else {
-                    console.error('Ошибка при обновлении username:', updateResponse.statusText);
-                }
+            const updateResponse = await userApi.updateUser(userData.id, userData.username, userData.avatar, userData.email);
+            if (updateResponse.status === 200) {
+                console.log('Username успешно обновлен на сервере');
+            } else {
+                console.error('Ошибка при обновлении username:', updateResponse.statusText);
             }
 
         } catch (error) {

@@ -4,6 +4,8 @@ import { Code2, Loader2, Monitor, TabletSmartphone, Triangle, Crown, ShieldUser,
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { profileApi, RecordType, BadgesType } from "../../components/api/profile";
+import Image from "next/image";
+import Twemoji from 'react-twemoji';
 
 const ProgressBar = ({ progress }: { progress: number }) => {
   const isComplete = progress === 100;
@@ -28,13 +30,13 @@ const SettingsModal = ({
   onClose, 
   badges,
   userId,
-  about: initialAbout // Добавляем пропс about
+  about: initialAbout
 }: { 
   isOpen: boolean; 
   onClose: () => void;
   badges: BadgesType | null;
   userId: string | null;
-  about: string | null; // Добавляем пропс about
+  about: string | null;
 }) => {
   const [pcBadge, setPcBadge] = useState(false);
   const [mobileBadge, setMobileBadge] = useState(false);
@@ -85,7 +87,6 @@ const SettingsModal = ({
         setOriginalMobileBadge(mobileBadge);
       }
       
-      // Update about text if changed
       if (aboutText !== originalAboutText) {
         await profileApi.updateAbout(userId, aboutText);
         setOriginalAboutText(aboutText);
@@ -140,6 +141,17 @@ const SettingsModal = ({
               rows={3}
               className="w-full bg-main-bg/50 border border-white/20 rounded p-2 text-sm resize-none"
               placeholder="Tell others a bit about yourself..."
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                }
+              }}
+              onPaste={(e) => {
+                e.preventDefault();
+                const pastedText = e.clipboardData.getData('text/plain');
+                const cleanedText = pastedText.replace(/[\n\r]/g, '');
+                document.execCommand('insertText', false, cleanedText);
+              }}
             />
             <div className="text-xs text-white/60 text-right mt-1">
               {aboutText.length}/25
@@ -204,6 +216,7 @@ export default function Profile({ params }: { params: { username: string } }) {
   const [name, setName] = useState<string | null>(null);
   const [hardest, setHardest] = useState<string | null>(null);
   const [about, setAbout] = useState<string | null>(null);
+  const [avatar, setAvatar] = useState<string | null>(null);
   const [place, setPlace] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordType[] | null>(null);
   const [badges, setBadges] = useState<BadgesType | null>(null);
@@ -231,7 +244,8 @@ export default function Profile({ params }: { params: { username: string } }) {
         setUserID(data._id);
         setHardest(data.hardest);
         setPlace(data.place);
-        setAbout(data.about || null);
+        setAvatar(data.avatar);
+        setAbout(data.about);
 
         if (data.records && typeof data.records === 'object' && data.records !== null) {
           const recordsArray = Object.entries(data.records).map(([levelId, recordData]) => ({
@@ -273,11 +287,23 @@ export default function Profile({ params }: { params: { username: string } }) {
           <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
             <div className="flex flex-col items-center gap-3">
               <div className="flex items-center gap-2 flex-wrap justify-center">
-                <span className={`text-lg sm:text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>
+                <Image
+                  src={avatar || '/default-avatar.jpg'}
+                  alt="Profile Avatar"
+                  width={30}
+                  height={30}
+                  className="rounded-full border-1 border-main-light"
+                />
+                <span className={`flex items-center text-lg sm:text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>
                   {username}
+                  <Twemoji options={{ className: 'twemoji' }} className="w-6 h-6 mx-1 select-none">
+                    {badges && badges.country && 
+                      <span>{badges.country}</span>
+                    }
+                  </Twemoji>
                 </span>
                 {badges && (
-                  <span className="flex gap-1 flex-wrap justify-center">
+                  <span className="flex gap-1 flex-wrap justify-center items-center">
                     {badges.owner && <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-badges-owner"/>}
                     {badges.dev && <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-badges-code"/>}
                     {badges.staff && <ShieldUser className="w-5 h-5 sm:w-6 sm:h-6 text-badges-staff"/>}

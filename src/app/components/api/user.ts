@@ -13,13 +13,18 @@ export const userApi = {
     id?: string;
     username?: string;
     email?: string;
+    avatar?: string;
   }) => {
     const response = await api.post('/account/add', userData);
     return response;
   },
 
-  updateUsername: async (userId: string, username: string) => {
-    const response = await api.put(`/account/update/${userId}`, { username });
+  updateUser: async (userId?: string, username?: string, avatar?: string, email?: string) => {
+    const response = await api.put(`/account/update/${userId}`, {
+      username: username,
+      email: email,
+      avatar: avatar
+    });
     return response;
   },
 };
