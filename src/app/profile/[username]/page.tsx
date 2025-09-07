@@ -133,11 +133,11 @@ const SettingsModal = ({
         
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-2">Note (max 25 characters)</label>
+            <label className="block text-sm font-medium mb-2">Note (max {!!badges?.staff ? '50' : '25'} characters)</label>
             <textarea
               value={aboutText}
               onChange={handleAboutChange}
-              maxLength={25}
+              maxLength={!!badges?.staff ? 50 : 25}
               rows={3}
               className="w-full bg-main-bg/50 border border-white/20 rounded p-2 text-sm resize-none"
               placeholder="Tell others a bit about yourself..."
@@ -154,7 +154,7 @@ const SettingsModal = ({
               }}
             />
             <div className="text-xs text-white/60 text-right mt-1">
-              {aboutText.length}/25
+              {aboutText.length}/{!!badges?.staff ? '50' : '25'}
             </div>
           </div>
           
