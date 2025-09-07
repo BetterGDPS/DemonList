@@ -226,6 +226,29 @@ const ProfileBadge = ({ icon: Icon, label, colorClass, className = "" }: Profile
   </span>
 );
 
+function renderAbout(about: string, isStaff: boolean) {
+  const urlRegex = /(https?:\/\/[^\s]+)/g;
+  if (isStaff && urlRegex.test(about)) {
+    const parts = about.split(urlRegex);
+    return parts.map((part, idx) =>
+      urlRegex.test(part) ? (
+        <a
+          key={idx}
+          href={part}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-300 underline hover:text-blue-200 transition-colors"
+        >
+          {part}
+        </a>
+      ) : (
+        <span key={idx}>{part}</span>
+      )
+    );
+  }
+  return about;
+}
+
 export default function Profile({ params }: { params: { username: string } }) {
   const { user: clerkUser, isLoaded: isClerkLoaded } = useUser();
   const [username, setUsername] = useState<string | null>(null);
@@ -391,7 +414,7 @@ export default function Profile({ params }: { params: { username: string } }) {
                   </button>
                 )}
               </div>
-                {specialAbout && 
+              {specialAbout && 
                 <span className="relative group text-xs text-white/70 break-keep italic">
                   {specialAbout}
                   <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999] not-italic">
@@ -401,7 +424,7 @@ export default function Profile({ params }: { params: { username: string } }) {
                 }
               {about && 
                 <span className="relative group text-sm text-white/80 break-keep">
-                  {about}
+                  {renderAbout(about, !!badges?.staff)}
                   <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999]">
                     About
                   </span>
