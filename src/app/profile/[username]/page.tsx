@@ -208,6 +208,24 @@ const SettingsModal = ({
   );
 };
 
+type ProfileBadgeProps = {
+  icon: React.ElementType;
+  label: string;
+  colorClass: string;
+  className?: string;
+};
+
+const ProfileBadge = ({ icon: Icon, label, colorClass, className = "" }: ProfileBadgeProps) => (
+  <span className="relative group">
+    <Icon
+      className={`w-5 h-5 sm:w-6 sm:h-6 hover:scale-[115%] transition-all ${colorClass} ${className}`}
+    />
+    <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999]">
+      {label}
+    </span>
+  </span>
+);
+
 export default function Profile({ params }: { params: { username: string } }) {
   const { user: clerkUser, isLoaded: isClerkLoaded } = useUser();
   const [username, setUsername] = useState<string | null>(null);
@@ -216,6 +234,7 @@ export default function Profile({ params }: { params: { username: string } }) {
   const [name, setName] = useState<string | null>(null);
   const [hardest, setHardest] = useState<string | null>(null);
   const [about, setAbout] = useState<string | null>(null);
+  const [specialAbout, setSpecialAbout] = useState<string | null>(null);
   const [avatar, setAvatar] = useState<string | null>(null);
   const [place, setPlace] = useState<number | null>(null);
   const [records, setRecords] = useState<RecordType[] | null>(null);
@@ -246,6 +265,7 @@ export default function Profile({ params }: { params: { username: string } }) {
         setPlace(data.place);
         setAvatar(data.avatar);
         setAbout(data.about);
+        setSpecialAbout(data.specialAbout);
 
         if (data.records && typeof data.records === 'object' && data.records !== null) {
           const recordsArray = Object.entries(data.records).map(([levelId, recordData]) => ({
@@ -280,12 +300,13 @@ export default function Profile({ params }: { params: { username: string } }) {
 
   return (
     <div className="mt-20 sm:mt-28 text-center px-4">
+      <title>{`${username}'s Profile`}</title>
       {error ? (
         <div className="text-red-400 text-lg">{error}</div>
       ) : username ? (
         <div className="flex flex-col gap-4 sm:gap-6">
           <div className="bg-main-darklight p-4 sm:p-6 rounded-lg mx-auto max-w-[500px] w-full">
-            <div className="flex flex-col items-center gap-3">
+            <div className="flex flex-col items-center gap-2">
               <div className="flex items-center gap-2 flex-wrap justify-center">
                 <Image
                   src={avatar || '/default-avatar.jpg'}
@@ -296,21 +317,68 @@ export default function Profile({ params }: { params: { username: string } }) {
                 />
                 <span className={`flex items-center text-lg sm:text-xl ${badges?.banned ? 'line-through text-red-400' : ''}`}>
                   {username}
-                  <Twemoji options={{ className: 'twemoji w-6 h-6 mx-1 select-none' }}>
-                    {badges && badges.country && 
-                      <span>{badges.country}</span>
-                    }
-                  </Twemoji>
+                  {badges && badges.country && (
+                    <span className="relative group flex flex-row">
+                      <Twemoji options={{ className: 'twemoji w-6 h-6 mx-1 select-none' }}>
+                        <span className="flex flex-row">{badges.country}</span>
+                      </Twemoji>
+                      <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999]">
+                        Player Country
+                      </span>
+                    </span>
+                  )}
                 </span>
                 {badges && (
                   <span className="flex gap-1 flex-wrap justify-center items-center">
-                    {badges.owner && <Crown className="w-5 h-5 sm:w-6 sm:h-6 text-badges-owner"/>}
-                    {badges.dev && <Code2 className="w-5 h-5 sm:w-6 sm:h-6 text-badges-code"/>}
-                    {badges.staff && <ShieldUser className="w-5 h-5 sm:w-6 sm:h-6 text-badges-staff"/>}
-                    {badges.test && <FlaskConical className="w-5 h-5 sm:w-6 sm:h-6 text-badges-test"/>}
-                    {badges.banned && <Ban className="w-5 h-5 sm:w-6 sm:h-6 text-badges-ban"/>}
-                    {badges.pc && <Monitor className="w-5 h-5 sm:w-6 sm:h-6"/>}
-                    {badges.mobile && <TabletSmartphone className="w-5 h-5 sm:w-6 sm:h-6"/>}
+                    {badges.owner && (
+                      <ProfileBadge
+                        icon={Crown}
+                        label="Owner"
+                        colorClass="text-badges-owner"
+                      />
+                    )}
+                    {badges.dev && (
+                      <ProfileBadge
+                        icon={Code2}
+                        label="Developer"
+                        colorClass="text-badges-code"
+                      />
+                    )}
+                    {badges.staff && (
+                      <ProfileBadge
+                        icon={ShieldUser}
+                        label="Staff"
+                        colorClass="text-badges-staff"
+                      />
+                    )}
+                    {badges.test && (
+                      <ProfileBadge
+                        icon={FlaskConical}
+                        label="Tester"
+                        colorClass="text-badges-test"
+                      />
+                    )}
+                    {badges.banned && (
+                      <ProfileBadge
+                        icon={Ban}
+                        label="Banned"
+                        colorClass="text-badges-ban"
+                      />
+                    )}
+                    {badges.pc && (
+                      <ProfileBadge
+                        icon={Monitor}
+                        label="PC Player"
+                        colorClass="text-white"
+                      />
+                    )}
+                    {badges.mobile && (
+                      <ProfileBadge
+                        icon={TabletSmartphone}
+                        label="Mobile Player"
+                        colorClass="text-white"
+                      />
+                    )}
                   </span>
                 )}
                 {isOwnProfile && (
@@ -323,9 +391,20 @@ export default function Profile({ params }: { params: { username: string } }) {
                   </button>
                 )}
               </div>
+                {specialAbout && 
+                <span className="relative group text-xs text-white/70 break-keep italic">
+                  {specialAbout}
+                  <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999] not-italic">
+                    Special about
+                  </span>
+                </span>
+                }
               {about && 
-                <span className="text-sm text-white/70 break-keep italic">
+                <span className="relative group text-sm text-white/80 break-keep">
                   {about}
+                  <span className="absolute left-1/2 -translate-x-1/2 bottom-full mb-2 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity bg-black/90 text-white text-xs rounded px-2 py-1 whitespace-nowrap z-[99999]">
+                    About
+                  </span>
                 </span>
               }
 

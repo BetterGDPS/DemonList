@@ -30,6 +30,7 @@ export interface UserProfileData {
   hardest: string | null;
   place: number | null;
   about: string | null;
+  specialAbout: string | null;
   avatar: string | null;
   records: Record<string, Omit<RecordType, 'levelId'>> | null;
   badges: Omit<BadgesType, 'banned'>;

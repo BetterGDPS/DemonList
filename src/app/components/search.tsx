@@ -63,6 +63,7 @@ export default function Search() {
 
   return (
     <div className="w-full max-w-screen-lg mx-auto px-2 mt-36 sm:mt-28">
+      <title>{`GlobalList - ${LIST_LABELS[listType] || listType}`}</title>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">
           {LIST_LABELS[listType] || `${listType} List`}

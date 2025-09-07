@@ -3,6 +3,7 @@ import Image from 'next/image';
 export default function page() {
   return (
     <div className="flex flex-col py-8 px-2 sm:px-4 lg:px-8 items-center mt-24">
+      <title>GlobalList - Staff</title>
       <div className="max-w-7xl mx-auto w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-stretch w-full">
           <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
@@ -64,46 +65,6 @@ export default function page() {
               </p>
             </div>
           </a>
-
-          <a className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center" href='/profile/drsdz'>
-            <div className="flex justify-center pt-2">
-              <div className="relative w-52 h-52">
-                <Image
-                  src="/staff/drsdz.png"
-                  alt="drsdz"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                />
-              </div>
-            </div>
-            <div className="p-6 text-center">
-              <h3 className="text-3xl font-bold mb-2">Drsdz</h3>
-              <p className="text-main-lightlight text-xl">
-                Exposer
-              </p>
-            </div>
-          </a>
-
-          <div className="flex flex-col rounded-2xl overflow-hidden shadow-lg border-2 border-main-light hover:border-main-darklight transition-all duration-300 h-full py-12 px-8 bg-main-dark w-full max-w-[420px] items-center">
-            <div className="flex justify-center pt-2">
-              <div className="relative w-52 h-52">
-                <Image
-                  src="/staff/holeks.png"
-                  alt="holeks"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 90vw, (max-width: 1024px) 45vw, 30vw"
-                />
-              </div>
-            </div>
-            <div className="p-6 text-center">
-              <h3 className="text-3xl font-bold mb-2">Holeks</h3>
-              <p className="text-main-lightlight text-xl">
-                Analytics
-              </p>
-            </div>
-          </div>
         </div>
       </div>
     </div>

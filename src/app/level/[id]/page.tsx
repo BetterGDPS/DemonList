@@ -75,16 +75,17 @@ export default function Level({ params: { id } }: Props) {
     );
   }
 
-  const { name, author, place, _id: lvl, song, obj, lenght, verifed, release, unlisted } = demon;
+  const { name, author, place, _id: lvl, song, obj, lenght, verifed, release, unlisted, list } = demon;
 
   return (
     <div className="flex justify-center items-center">
+      <title>{`${name}`}</title>
       <div className="mt-28 w-[1000px] bg-main-darklight rounded-xl shadow-2xl p-10">
         <span className="flex flex-col justify-center items-center flex-1">
           <span className="flex flex-row items-end">
             <p className="text-3xl mx-3 mb-2">#{place} {name}</p>
           </span>
-          <p className="text-white/70 text-lg">{unlisted} list</p>
+          <p className="text-white/70 text-lg">{list} list</p>
           <p className="text-white/70 text-xl">by {author}</p>
         </span>
         <div className="flex justify-center items-center relative">

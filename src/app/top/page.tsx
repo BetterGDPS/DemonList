@@ -74,6 +74,7 @@ export default function PlayerTop() {
 
   return (
     <div className="mt-24 mx-auto max-w-2xl">
+      <title>GlobalList - Players Top</title>
       <h1 className="text-3xl font-bold text-center mb-8">Leaderboard</h1>
       <div className="bg-main-darklight rounded-lg shadow-md p-1 transition-transform">
         {players.map((player) => (
@@ -90,7 +91,7 @@ export default function PlayerTop() {
             <div className="flex items-center">
               {player.country && (
                 <Twemoji options={{ className: 'twemoji w-6 h-6 mr-2 select-none' }}>
-                  <span>
+                  <span className='flex flex-row'>
                     {player.country}
                   </span>
                 </Twemoji>
